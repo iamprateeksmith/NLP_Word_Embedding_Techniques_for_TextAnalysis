@@ -164,9 +164,9 @@ data/jackbstl.txt [('jack', 0.124), ('ogre', 0.1), ('harp', 0.048), ('beanstalk'
 
   * Broadly, there are two models CBOW(Continuous Bag of Words) and Skip-Gram. Both neural network architectures essentially help the network learn how to represent a word. This is unsupervised machine learning, and labels are needed to train the model. Either of these two models, can create the labels for the given input and prepare the neural network to train the model and perform the desired task.
 <img src='https://miro.medium.com/max/875/0*dyZ7Syt3DMbN7nF9' >
-The difference in architecture between CBOW & Skip-gram models
-    
-## CBOW<hr><hr><br><br>
+The difference in architecture between CBOW & Skip-gram models<br>
+<hr>    
+## CBOW<hr><br><br>
 
 * CBOW(continuous bag-of-words) is a model suitable for work with smaller databases, and it does not need much RAM requirement either. In CBOW, we predict a word given its context. The entire vocabulary is used to create a “Bag of Words” model before proceeding to the next task.
 
@@ -176,84 +176,130 @@ The difference in architecture between CBOW & Skip-gram models
         * John likes to watch movies. Mary likes movies too.
         * Mary also likes to watch football games.
         * A list of words is created by breaking the two sentences.
+ 
+<img src = 'https://miro.medium.com/max/875/0*ozww2AL1RtblZsBA'>
+* We then label each word with the number of occurrences. This is called a bag of words. In computers, this is usually captured as a JSON file.
+<img src = 'https://miro.medium.com/max/875/0*zAHNwT93S17bL61w'>
+* The sentences are then combined to get the overall frequency of each unique word.
+<img src = 'https://miro.medium.com/max/875/0*k5o9wPgg9kl7MpCO'>
+* Now that the bag of words model is ready, we can use CBOW to predict the probability of a word given these groups of words.
+<br>
+<img src = 'https://miro.medium.com/max/485/1*29PqUsL0nBcdxhu12JOiig.png'>    
+CBOW model to predict probabilities of words<br><br>
+    
+* Each word and its frequency are passed as a unique vector into the input layer of the neural network. Say, if we have X words, the input layer takes in X[1XV] vectors and gives out 1[1XV] in the output layer.
 
-We then label each word with the number of occurrences. This is called a bag of words. In computers, this is usually captured as a JSON file.
+* The input-hidden layer matrix sizes up to [VXN] and the output-hidden layer matrix sizes to [NXV]. In this case, N is the number of dimensions. The layers have no activation function between them.
 
-The sentences are then combined to get the overall frequency of each unique word.
+* To calculate the output, the hidden input layers’ weights are multiplied by the hidden output layers weights. The error between the output and targets is calculated, and the weights are constantly readjusted through backpropagation. The only non-linearity is the softmax calculations in the output layer to generate probabilities for the word vectors.
 
-Now that the bag of words model is ready, we can use CBOW to predict the probability of a word given these groups of words.
+* Overall, after calculations and readjustments, the weight between the hidden-output layer is taken as the word vector representation. As we can see, this architecture allows the model to predict the current word relying on influence from surrounding words.
 
-CBOW model to predict probabilities of words
-Each word and its frequency are passed as a unique vector into the input layer of the neural network. Say, if we have X words, the input layer takes in X[1XV] vectors and gives out 1[1XV] in the output layer.
-The input-hidden layer matrix sizes up to [VXN] and the output-hidden layer matrix sizes to [NXV]. In this case, N is the number of dimensions. The layers have no activation function between them.
-To calculate the output, the hidden input layers’ weights are multiplied by the hidden output layers weights. The error between the output and targets is calculated, and the weights are constantly readjusted through backpropagation. The only non-linearity is the softmax calculations in the output layer to generate probabilities for the word vectors.
-Overall, after calculations and readjustments, the weight between the hidden-output layer is taken as the word vector representation. As we can see, this architecture allows the model to predict the current word relying on influence from surrounding words.
-Skip Gram
-Suppose we have 10000 unique words, and we represent an input word like “ape” as a one-hot vector(A categorical word/variable can be better understood by an ML algorithm when it is one hot encoded to 0’s and 1's). This vector will have 10000 components; each component contains one vocabulary. And we place ‘1" in one position, which represents the word “ape” and place 0 in the rest of the positions.
-The output of the network is a single vector with 10000 components as well. The probability that a randomly selected nearby word is that vocabulary word. We don’t need to consider the hidden layer neurons since none of them are active. However, the output neurons use softmax.
-When we evaluate the trained network on an input word, the output is a probability distribution instead of a one-hot vector.
-The Hidden Layer
-For example, we use a word vector with 300 features as the input. So the hidden layer should be a 300*10000 matrix, which means there are 10000 rows for words in vocabulary and 300 columns for hidden neurons.
-The one-hot vector we use as input is used to pick out the corresponding row in the matrix. This means that the hidden layers are only used as a lookup table. And the output of the hidden layer is just the word vector for the input word.
-The Output Layer
-As we pick up the word vector for “ape” in the hidden layers, it will be sent to the output layer. The output layer is a softmax regression classifier.
-So what is the softmax regression classifier? Softmax regression is a generalization of logistic regression that we can use for multi-class classification.
+    
+<hr>## Skip Gram<hr><br><br>
+    
+* Suppose we have 10000 unique words, and we represent an input word like “ape” as a one-hot vector(A categorical word/variable can be better understood by an ML algorithm when it is one hot encoded to 0’s and 1's). This vector will have 10000 components; each component contains one vocabulary. And we place ‘1" in one position, which represents the word “ape” and place 0 in the rest of the positions.
 
+    * The output of the network is a single vector with 10000 components as well. The probability that a randomly selected nearby word is that vocabulary word. We don’t need to consider the hidden layer neurons since none of them are active. However, the output neurons use softmax.
+
+    * When we evaluate the trained network on an input word, the output is a probability distribution instead of a one-hot vector.
+
+    
+<br><hr>### The Hidden Layer<br><br>
+    
+* For example, we use a word vector with 300 features as the input. So the hidden layer should be a 300*10000 matrix, which means there are 10000 rows for words in vocabulary and 300 columns for hidden neurons.
+
+    * The one-hot vector we use as input is used to pick out the corresponding row in the matrix. This means that the hidden layers are only used as a lookup table. And the output of the hidden layer is just the word vector for the input word.
+
+<br><hr>### The Output Layer<br><br>
+    
+* As we pick up the word vector for “ape” in the hidden layers, it will be sent to the output layer. The output layer is a softmax regression classifier.
+* So what is the softmax regression classifier? Softmax regression is a generalization of logistic regression that we can use for multi-class classification.
+<img src = 'https://miro.medium.com/max/875/0*DzjiU2If05EqOIaV'>
 Understanding softmax regression
-In softmax regression, all of the input components are classified in different classes. And the output is a one-hot vector.
 
+    In softmax regression, all of the input components are classified in different classes. And the output is a one-hot vector.
+<img src = 'https://miro.medium.com/max/875/0*dBgPz2W6YsfV6AJP'>
+    
 Implementing softmax for a word with several features
-After the output vector multiple the weight vector from the hidden layer, it then applies the function exp(x) to the result. Finally, to get the outputs to sum up to 1, we need to divide the result by the sum of the result from all 10000 output nodes.
-The words with a similar meaning are brought closer together in the vector space. The skip-gram model uses a word to predict the words surrounding it, and it relies on words with a closer context to function efficiently.
-Differences between CBOW and Skip-Gram
-Although the two models show mirror symmetry, they vary in terms of architecture and performance.
-The Skip-Gram model predicts words surrounding a certain word by relying on the contextual similarity of words. On the other hand, the CBOW model uses the Bag of words approach and predicts a word using the words that surround it.
-The Skip-Gram model is more accurate when it comes to infrequent words. It suits larger databases and requires more RAM to function. The CBOW model is faster, does not guarantee the handling of infrequent words, requires less RAM, and suits smaller databases.
-The choice of model depends on the user’s task.
-Training Tricks
+
+    * After the output vector multiple the weight vector from the hidden layer, it then applies the function exp(x) to the result. Finally, to get the outputs to sum up to 1, we need to divide the result by the sum of the result from all 10000 output nodes.
+
+    * The words with a similar meaning are brought closer together in the vector space. The skip-gram model uses a word to predict the words surrounding it, and it relies on words with a closer context to function efficiently.
+<hr><br><br>
+## Differences between CBOW and Skip-Gram<br><br>
+    
+* Although the two models show mirror symmetry, they vary in terms of architecture and performance.
+
+    1 - The Skip-Gram model predicts words surrounding a certain word by relying on the contextual similarity of words. On the other hand, the CBOW model uses the Bag of words approach and predicts a word using the words that surround it.
+
+    2 - The Skip-Gram model is more accurate when it comes to infrequent words. It suits larger databases and requires more RAM to function. The CBOW model is faster, does not guarantee the handling of infrequent words, requires less RAM, and suits smaller databases.
+
+    The choice of model depends on the user’s task.
+
+### Training Tricks
 To speed up the training of word2vec model, there are two ways you could try:
-Hierarchical Softmax
+
+    
+### Hierarchical Softmax
 Now, the biggest problem is that we have a large amount of calculation from the hidden layer to the output softmax layer, because all words for softmax probability must be calculated, before finding the highest probability value. This model is shown below. And V represents the size of the glossary.
-
+<img src = 'https://miro.medium.com/max/633/0*4yA5fjBeN9CWKlgf'>
 Hierarchical Softmax
-The first improvement:
+<br><br>    
+### The first improvement:
 For the mapping from the input layer to the hidden layer, a simple method of summing and averaging all input word vectors is used instead of a linear transformation of the neural network and an activation function. For instance, the input is three 4-dimensional word vectors:
-( 1, 2, 3, 4 )
-( 9, 6, 11, 8 )
-( 5, 10, 7, 12 )
-Then the word vector after our word2vec mapping is
-( 5, 6, 7, 8 )
-The second improvement:
-It improves the number of calculations from the hidden layer to the output softmax layer. To avoid calculating all words for the softmax probability, word2vec uses the Huffman tree to replace mapping from the hidden layer to the output softmax layer.
-Since we have converted all the probability calculations from the output softmax layer into a binary Huffman tree, our softmax probability calculation only needs to be performed along with the tree structure. As shown below, we can walk along the Huffman tree from the root node to the words of our leaf nodes W2.
+        ( 1, 2, 3, 4 )
+        ( 9, 6, 11, 8 )
+        ( 5, 10, 7, 12 )
+        Then the word vector after our word2vec mapping is
+        ( 5, 6, 7, 8 )
 
+### The second improvement:
+
+    * It improves the number of calculations from the hidden layer to the output softmax layer. To avoid calculating all words for the softmax probability, word2vec uses the Huffman tree to replace mapping from the hidden layer to the output softmax layer.
+
+    * Since we have converted all the probability calculations from the output softmax layer into a binary Huffman tree, our softmax probability calculation only needs to be performed along with the tree structure. As shown below, we can walk along the Huffman tree from the root node to the words of our leaf nodes W2.
+<img src = 'https://miro.medium.com/max/485/0*vz5dT8ind6UQWPUq'>
 Binary Huffman Tree for probability calculations
-All the internal nodes in our Huffman tree are similar to the neurons in the hidden layer of the neural network, where the word vector of the root node corresponds to our projected word vector, and all leaves nodes are similar to the neurons in the softmax output layer of the neural network. The number of leaf nodes is the size of the vocabulary. In the Huffman tree, the softmax mapping from the hidden layer to the output layer is step by step along the Huffman tree. Therefore, this softmax is named “Hierarchical Softmax.”
-Negative Sampling
-As mentioned in the previous section, millions of weights and tens of millions of training data mean that it is difficult to train this network.
-So what we can do is to modify the optimization objective function. This strategy is called “Negative Sampling” so that each training sample only updates a small part of the weights in the model. It could reduce the number of train calculations but also improve the quality of the final word vector.
-We need to sample common words first.
 
+    All the internal nodes in our Huffman tree are similar to the neurons in the hidden layer of the neural network, where the word vector of the root node corresponds to our projected word vector, and all leaves nodes are similar to the neurons in the softmax output layer of the neural network. The number of leaf nodes is the size of the vocabulary. In the Huffman tree, the softmax mapping from the hidden layer to the output layer is step by step along the Huffman tree. Therefore, this softmax is named “Hierarchical Softmax.”
+
+### Negative Sampling
+* As mentioned in the previous section, millions of weights and tens of millions of training data mean that it is difficult to train this network.
+
+    * So what we can do is to modify the optimization objective function. This strategy is called “Negative Sampling” so that each training sample only updates a small part of the weights in the model. It could reduce the number of train calculations but also improve the quality of the final word vector.
+* We need to sample common words first.
+<img src = 'https://miro.medium.com/max/875/0*iXFGauo-CL1FcpQh'>
 Converting Source Text to Training Samples
-For common words like “the,” there will be two issues:
-For example, (fox, the) doesn’t convey our information about the fox. ‘The’ appears too much;
-We have too many (‘the’, …) samples, more than we need;
-So word2vec uses a down-sampling strategy. For each word we encounter in the training sample, we have a probability of deleting it. This probability is called the “sampling rate” which is related to the frequency of words.
+
+    For common words like “the,” there will be two issues:
+1 - For example, (fox, the) doesn’t convey our information about the fox. ‘The’ appears too much;
+2 - We have too many (‘the’, …) samples, more than we need;
+
+    * So word2vec uses a down-sampling strategy. For each word we encounter in the training sample, we have a probability of deleting it. This probability is called the “sampling rate” which is related to the frequency of words.
 What is the sampling rate?
-We use z(wi) to represent a word, and z(wi) represents the probability (frequency) that it appears in the thesaurus. For example, peanut appears 1,000 times in the 1bilion’s corpus, then z(peanut)=1E-6. Then there is a parameter called ‘sample’ that controls the degree of downsampling, which is generally set to 0.001. The smaller the value, the easier it is to throw away some words.
 
+    * We use z(wi) to represent a word, and z(wi) represents the probability (frequency) that it appears in the thesaurus. For example, peanut appears 1,000 times in the 1bilion’s corpus, then z(peanut)=1E-6. Then there is a parameter called ‘sample’ that controls the degree of downsampling, which is generally set to 0.001. The smaller the value, the easier it is to throw away some words.
+<img src = 'https://miro.medium.com/max/495/0*dUKnj5IMXwf4y69H'>
 Equation of probability to retain a word
-It can be seen that if z(wi)<=0.0026 P(wi)=1, then we will not throw these words away. If the occurrence frequency is very high, z(wi)==1(equivalent to nearly every training sample has the word), P(wi)=0.033, you can see that there is still a very low probability that we retain this word.
-And then we do negative sampling.
-Training a neural network means inputting a training sample to adjust the weight so that it predicts this training sample more accurately. In other words, each training sample will affect all weights in the network. As we discussed before, the size of our dictionary means that we have a lot of weight, all of which need to be adjusted slightly. Negative sampling solves this problem, and every time we change a small part of the weight, not all.
-If the vocabulary size is 10000, when the input sample (“fox”, “quick”) is input to the neural network, “fox” is one-hot encoded, and in the output layer we expect the neuron node corresponding to the “quick” word to be output 1, the remaining 9999 should output 0. Here, the words corresponding to the 9999 neuron nodes that we expect to be 0 are negative words. The idea of ​​negative sampling is also very straightforward. A small number of negative words will be randomly selected, such as 10 negative words. Then update the corresponding weight parameters.
-Assume that the original model requires 300 × 10,000 each time (in fact, there is no reduction in the number, but during the operation, the number of loads needs to be reduced.) Now only 300 × (1 + 10) is reduced a lot.
-Selecting negative samples:
-Here comes the question, how to choose 10 negative samples? The negative samples are also selected based on their probability of occurrence, and this probability is related to their frequency of occurrence. Words that appear more often are more likely to be selected as negative samples.
-This probability is expressed by a formula, and each word is given a weight-related to its frequency. The probability formula is:
 
+    * It can be seen that if z(wi)<=0.0026 P(wi)=1, then we will not throw these words away. If the occurrence frequency is very high, z(wi)==1(equivalent to nearly every training sample has the word), P(wi)=0.033, you can see that there is still a very low probability that we retain this word.
+And then we do negative sampling.
+
+                                          * Training a neural network means inputting a training sample to adjust the weight so that it predicts this training sample more accurately. In other words, each training sample will affect all weights in the network. As we discussed before, the size of our dictionary means that we have a lot of weight, all of which need to be adjusted slightly. Negative sampling solves this problem, and every time we change a small part of the weight, not all.
+
+                                          * If the vocabulary size is 10000, when the input sample (“fox”, “quick”) is input to the neural network, “fox” is one-hot encoded, and in the output layer we expect the neuron node corresponding to the “quick” word to be output 1, the remaining 9999 should output 0. Here, the words corresponding to the 9999 neuron nodes that we expect to be 0 are negative words. The idea of ​​negative sampling is also very straightforward. A small number of negative words will be randomly selected, such as 10 negative words. Then update the corresponding weight parameters.
+
+                                          * Assume that the original model requires 300 × 10,000 each time (in fact, there is no reduction in the number, but during the operation, the number of loads needs to be reduced.) Now only 300 × (1 + 10) is reduced a lot.
+
+                                         Selecting negative samples:
+* Here comes the question, how to choose 10 negative samples? The negative samples are also selected based on their probability of occurrence, and this probability is related to their frequency of occurrence. Words that appear more often are more likely to be selected as negative samples.
+* This probability is expressed by a formula, and each word is given a weight-related to its frequency. The probability formula is:
+<img src = 'https://miro.medium.com/max/325/0*U0kmPLfkQvz2fDfX'>
 Equation of probability for weight-related frequencies
-Code tutorial
+<br><br><br>
+    
+## Code tutorial
 You can train your word2vec by genism easily. In the following example, we use a bunch of fairy tales as the data set. This code use word2vec model to find out familiar word for a specific word.
 import gensim
 import logging
@@ -283,7 +329,9 @@ print(model.wv.most_similar (positive=w1))
 The output is:
 [('dry', 0.6215552091598511), ('neat', 0.5800684094429016), ('leather', 0.5562355518341064), ('cotton', 0.5484817624092102), ('heated', 0.5442177653312683), ('woollen', 0.5423670411109924), ('linen', 0.5314322710037231), ('tidy', 0.526747465133667), ('fur', 0.5222363471984863), ('starched', 0.5206629037857056)]
 These words are considered to have some connection with ‘clean’.
-Summary
-In the above blog post, we introduced and explained two commonly-used word embedding techniques (TF-IDF and Word2vec). Each method includes an introduction, diagram, implementation, and elaboration with code on a real-world dataset. Further, we have also included Training Tricks (improvement methods) for the model. Word Embedding is the foundation of any major text analysis task, and we hope to have done justice to this topic by covering it in-depth.
+<br><br><hr>
+## Summary<hr><br>
+    
+    Two commonly-used word embedding techniques (TF-IDF and Word2vec). Each method includes an introduction, diagram, implementation, and elaboration with code on a real-world dataset. Further, we have also included Training Tricks (improvement methods) for the model. Word Embedding is the foundation of any major text analysis task, and we hope to have done justice to this topic by covering it in-depth.
 
 
