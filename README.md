@@ -286,13 +286,13 @@ Equation of probability to retain a word
     * It can be seen that if z(wi)<=0.0026 P(wi)=1, then we will not throw these words away. If the occurrence frequency is very high, z(wi)==1(equivalent to nearly every training sample has the word), P(wi)=0.033, you can see that there is still a very low probability that we retain this word.
 And then we do negative sampling.
 
-                                          * Training a neural network means inputting a training sample to adjust the weight so that it predicts this training sample more accurately. In other words, each training sample will affect all weights in the network. As we discussed before, the size of our dictionary means that we have a lot of weight, all of which need to be adjusted slightly. Negative sampling solves this problem, and every time we change a small part of the weight, not all.
+* Training a neural network means inputting a training sample to adjust the weight so that it predicts this training sample more accurately. In other words, each training sample will affect all weights in the network. As we discussed before, the size of our dictionary means that we have a lot of weight, all of which need to be adjusted slightly. Negative sampling solves this problem, and every time we change a small part of the weight, not all.
 
-                                          * If the vocabulary size is 10000, when the input sample (“fox”, “quick”) is input to the neural network, “fox” is one-hot encoded, and in the output layer we expect the neuron node corresponding to the “quick” word to be output 1, the remaining 9999 should output 0. Here, the words corresponding to the 9999 neuron nodes that we expect to be 0 are negative words. The idea of ​​negative sampling is also very straightforward. A small number of negative words will be randomly selected, such as 10 negative words. Then update the corresponding weight parameters.
+* If the vocabulary size is 10000, when the input sample (“fox”, “quick”) is input to the neural network, “fox” is one-hot encoded, and in the output layer we expect the neuron node corresponding to the “quick” word to be output 1, the remaining 9999 should output 0. Here, the words corresponding to the 9999 neuron nodes that we expect to be 0 are negative words. The idea of ​​negative sampling is also very straightforward. A small number of negative words will be randomly selected, such as 10 negative words. Then update the corresponding weight parameters.
 
-                                          * Assume that the original model requires 300 × 10,000 each time (in fact, there is no reduction in the number, but during the operation, the number of loads needs to be reduced.) Now only 300 × (1 + 10) is reduced a lot.
+* Assume that the original model requires 300 × 10,000 each time (in fact, there is no reduction in the number, but during the operation, the number of loads needs to be reduced.) Now only 300 × (1 + 10) is reduced a lot.
 
-                                         Selecting negative samples:
+               Selecting negative samples:
 * Here comes the question, how to choose 10 negative samples? The negative samples are also selected based on their probability of occurrence, and this probability is related to their frequency of occurrence. Words that appear more often are more likely to be selected as negative samples.
 * This probability is expressed by a formula, and each word is given a weight-related to its frequency. The probability formula is:
 <img src = 'https://miro.medium.com/max/325/0*U0kmPLfkQvz2fDfX'>
@@ -332,6 +332,6 @@ These words are considered to have some connection with ‘clean’.
 <br><br><hr>
 ## Summary<hr><br>
     
-    Two commonly-used word embedding techniques (TF-IDF and Word2vec). Each method includes an introduction, diagram, implementation, and elaboration with code on a real-world dataset. Further, we have also included Training Tricks (improvement methods) for the model. Word Embedding is the foundation of any major text analysis task, and we hope to have done justice to this topic by covering it in-depth.
+Two commonly-used word embedding techniques (TF-IDF and Word2vec). Each method includes an introduction, diagram, implementation, and elaboration with code on a real-world dataset. Further, we have also included Training Tricks (improvement methods) for the model. Word Embedding is the foundation of any major text analysis task, and we hope to have done justice to this topic by covering it in-depth.
 
 
