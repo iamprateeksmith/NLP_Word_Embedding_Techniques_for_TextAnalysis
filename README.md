@@ -240,8 +240,8 @@ Implementing softmax for a word with several features
 ### Training Tricks
 To speed up the training of word2vec model, there are two ways you could try:
 
-    
-### Hierarchical Softmax
+<br><br><br>    
+### Hierarchical Softmax<hr><br><br>
 Now, the biggest problem is that we have a large amount of calculation from the hidden layer to the output softmax layer, because all words for softmax probability must be calculated, before finding the highest probability value. This model is shown below. And V represents the size of the glossary.
 <img src = 'https://miro.medium.com/max/633/0*4yA5fjBeN9CWKlgf'>
 Hierarchical Softmax
