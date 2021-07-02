@@ -163,7 +163,7 @@ data/jackbstl.txt [('jack', 0.124), ('ogre', 0.1), ('harp', 0.048), ('beanstalk'
   * In all technicalities, Word2vec is a shallow two-layered neural network, that is used to produce the relative model of word embedding. It works by collecting a large number of vocabulary based datasets as input and outputs a vector space, such that each word in the dictionary maps itself to a unique vector. This allows us to represent the relationship between words.
 
   * Broadly, there are two models CBOW(Continuous Bag of Words) and Skip-Gram. Both neural network architectures essentially help the network learn how to represent a word. This is unsupervised machine learning, and labels are needed to train the model. Either of these two models, can create the labels for the given input and prepare the neural network to train the model and perform the desired task.
-![Test_Image]('https://miro.medium.com/max/875/0*dyZ7Syt3DMbN7nF9')
+<img src='https://miro.medium.com/max/875/0*dyZ7Syt3DMbN7nF9' >
 The difference in architecture between CBOW & Skip-gram models
     
 ## CBOW<hr><hr><br><br>
